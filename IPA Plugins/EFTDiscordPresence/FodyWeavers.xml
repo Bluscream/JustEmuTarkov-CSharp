@@ -1,0 +1,34 @@
+﻿<Weavers xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="FodyWeavers.xsd">
+  <Costura IncludeDebugSymbols='true'>
+    <ExcludeAssemblies>
+      Accessibility
+      AmplifyMotion
+      Assembly-CSharp
+      Assembly-CSharp-firstpass
+      Assembly-UnityScript
+      Assembly-UnityScript-firstpass
+      Boo.Lang
+      Comfort
+      Comfort.Unity
+      DecalSystem.Runtime
+      DynamicLoadingKit
+      IllusionPlugin
+      NLog
+      Newtonsoft.Json
+      System
+      System.Configuration
+      System.Core
+      System.Runtime.Serialization
+      System.ServiceModel
+      System.Transactions
+      System.Xml.Linq
+      System.Data.DataSetExtensions
+      System.Data
+      System.Xml
+      UnityEngine
+      UnityEngine.Networking
+      UnityEngine.UI
+      zlib.net
+    </ExcludeAssemblies>
+  </Costura>
+</Weavers>

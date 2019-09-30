@@ -17,6 +17,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IPA", "..\IPA\IPA\IPA.cspro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IPA Test", "IPA Test\IPA Test.csproj", "{4EF9C4E5-5905-451B-8EF8-9DA96527D20B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VRCDiscordPresence", "..\VRChat\Mods\_DECOMPILED\VRCDiscordPresence\VRCDiscordPresence.csproj", "{41BF3FE3-DFC6-4865-9001-365FE16460FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFTDiscordPresence", "IPA Plugins\EFTDiscordPresence\EFTDiscordPresence.csproj", "{FCD94054-A094-42BE-B6A8-851A6533B744}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -107,6 +111,30 @@ Global
 		{4EF9C4E5-5905-451B-8EF8-9DA96527D20B}.Release|x64.Build.0 = Release|Any CPU
 		{4EF9C4E5-5905-451B-8EF8-9DA96527D20B}.Release|x86.ActiveCfg = Release|Any CPU
 		{4EF9C4E5-5905-451B-8EF8-9DA96527D20B}.Release|x86.Build.0 = Release|Any CPU
+		{41BF3FE3-DFC6-4865-9001-365FE16460FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41BF3FE3-DFC6-4865-9001-365FE16460FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41BF3FE3-DFC6-4865-9001-365FE16460FF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{41BF3FE3-DFC6-4865-9001-365FE16460FF}.Debug|x64.Build.0 = Debug|Any CPU
+		{41BF3FE3-DFC6-4865-9001-365FE16460FF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{41BF3FE3-DFC6-4865-9001-365FE16460FF}.Debug|x86.Build.0 = Debug|Any CPU
+		{41BF3FE3-DFC6-4865-9001-365FE16460FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41BF3FE3-DFC6-4865-9001-365FE16460FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41BF3FE3-DFC6-4865-9001-365FE16460FF}.Release|x64.ActiveCfg = Release|Any CPU
+		{41BF3FE3-DFC6-4865-9001-365FE16460FF}.Release|x64.Build.0 = Release|Any CPU
+		{41BF3FE3-DFC6-4865-9001-365FE16460FF}.Release|x86.ActiveCfg = Release|Any CPU
+		{41BF3FE3-DFC6-4865-9001-365FE16460FF}.Release|x86.Build.0 = Release|Any CPU
+		{FCD94054-A094-42BE-B6A8-851A6533B744}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCD94054-A094-42BE-B6A8-851A6533B744}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCD94054-A094-42BE-B6A8-851A6533B744}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FCD94054-A094-42BE-B6A8-851A6533B744}.Debug|x64.Build.0 = Debug|Any CPU
+		{FCD94054-A094-42BE-B6A8-851A6533B744}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FCD94054-A094-42BE-B6A8-851A6533B744}.Debug|x86.Build.0 = Debug|Any CPU
+		{FCD94054-A094-42BE-B6A8-851A6533B744}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCD94054-A094-42BE-B6A8-851A6533B744}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCD94054-A094-42BE-B6A8-851A6533B744}.Release|x64.ActiveCfg = Release|Any CPU
+		{FCD94054-A094-42BE-B6A8-851A6533B744}.Release|x64.Build.0 = Release|Any CPU
+		{FCD94054-A094-42BE-B6A8-851A6533B744}.Release|x86.ActiveCfg = Release|Any CPU
+		{FCD94054-A094-42BE-B6A8-851A6533B744}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

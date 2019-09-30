@@ -4,7 +4,7 @@ using System.IO;
 // using NLog;
 // using UnityEngine;
 
-namespace JustEmuTarkov {
+namespace EFTDiscordPresence {
     public static class Logger {
         private const string LogFile = "Logs/Plugins.log";
         // private static readonly NLog.Logger NLogger = LogManager.GetCurrentClassLogger();

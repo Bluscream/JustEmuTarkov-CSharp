@@ -13,13 +13,16 @@ namespace TestPlugin {
         private enum LogLevel { Trace, Debug, Info, Warn, Error, Fatal }
 
         private static void Init() {
-            LogWriter = File.AppendText(LogFile);
-            /*var config = new NLog.Config.LoggingConfiguration();
-            var logfile = new NLog.Targets.FileTarget("logfile") { FileName = LogFile };
-            var logconsole = new NLog.Targets.ConsoleTarget("logconsole");
-            config.AddRule(NLog.LogLevel.Trace, NLog.LogLevel.Fatal, logconsole);
-            config.AddRule(NLog.LogLevel.Trace, NLog.LogLevel.Fatal, logfile);
-            LogManager.Configuration = config;*/
+                Initialized = true;
+            try {
+                LogWriter = File.AppendText(LogFile);
+                /*var config = new NLog.Config.LoggingConfiguration();
+                var logfile = new NLog.Targets.FileTarget("logfile") { FileName = LogFile };
+                var logconsole = new NLog.Targets.ConsoleTarget("logconsole");
+                config.AddRule(NLog.LogLevel.Trace, NLog.LogLevel.Fatal, logconsole);
+                config.AddRule(NLog.LogLevel.Trace, NLog.LogLevel.Fatal, logfile);
+                LogManager.Configuration = config;*/
+            }  catch (Exception ex) { Error("Unable to initialize LogWriter: {0}", ex.Message); }
         }
 
         public static void Trace(string msg, params object[] format) => log(LogLevel.Trace, msg: msg, format: format);
@@ -30,14 +33,14 @@ namespace TestPlugin {
         public static void Error(string msg, params object[] format) => log(LogLevel.Error, msg: msg, format: format);
         public static void Fatal(string msg, params object[] format) => log(LogLevel.Fatal, msg: msg, format: format);
         private static void log(LogLevel logLevel, string msg, params object[] format) {
-            if (!Initialized) { Initialized = true; Init(); }
+            if (!Initialized) Init();
             var formatted = string.Format(msg, format);
             // NLogger.Info(formatted); UnityEngine.Debug.Log(formatted);
              string timestamp = DateTime.Now.ToString("HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
             StackFrame frame = new StackFrame(2); var method = frame.GetMethod(); var cName = method.DeclaringType.Name; var mName = method.Name;
-            var line = $"[{timestamp}] <TestPlugin> {logLevel} - {cName}.{mName}: {formatted}";
+            var line = $"[{timestamp}] <JustEmuTarkov> {logLevel} - {cName}.{mName}: {formatted}";
             Console.WriteLine(line);
-            LogWriter.WriteLine(line);
+            if (LogWriter != null) LogWriter.WriteLine(line);
         }
     }
 }
