@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 
@@ -78,8 +79,6 @@ namespace JustEmuTarkov
         public static List<string> ReadAllLines(this FileInfo file) => File.ReadAllLines(file.FullName).ToList();
 
         #endregion FileInfo
-
-
 
         #region Object
 
@@ -223,8 +222,6 @@ namespace JustEmuTarkov
 
         #endregion List
 
-
-
         #region Enum
 
         public static string GetDescription(this Enum value)
@@ -271,8 +268,6 @@ namespace JustEmuTarkov
 
         #endregion Enum
 
-
-
         #region bool
 
         public static string ToYesNo(this bool input) => input ? "Yes" : "No";
@@ -282,5 +277,59 @@ namespace JustEmuTarkov
         public static string ToOnOff(this bool input) => input ? "On" : "Off";
 
         #endregion bool
+
+        #region Reflection
+
+        /// <summary>
+        /// Given a lambda expression that calls a method, returns the method info.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="expression">The expression.</param>
+        /// <returns></returns>
+        public static MethodInfo GetMethodInfo(Expression<Action> expression)
+        {
+            return GetMethodInfo((LambdaExpression)expression);
+        }
+
+        /// <summary>
+        /// Given a lambda expression that calls a method, returns the method info.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="expression">The expression.</param>
+        /// <returns></returns>
+        public static MethodInfo GetMethodInfo<T>(Expression<Action<T>> expression)
+        {
+            return GetMethodInfo((LambdaExpression)expression);
+        }
+
+        /// <summary>
+        /// Given a lambda expression that calls a method, returns the method info.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="expression">The expression.</param>
+        /// <returns></returns>
+        public static MethodInfo GetMethodInfo<T, TResult>(Expression<Func<T, TResult>> expression)
+        {
+            return GetMethodInfo((LambdaExpression)expression);
+        }
+
+        /// <summary>
+        /// Given a lambda expression that calls a method, returns the method info.
+        /// </summary>
+        /// <param name="expression">The expression.</param>
+        /// <returns></returns>
+        public static MethodInfo GetMethodInfo(LambdaExpression expression)
+        {
+            MethodCallExpression outermostExpression = expression.Body as MethodCallExpression;
+
+            if (outermostExpression == null)
+            {
+                throw new ArgumentException("Invalid Expression. Expression should consist of a Method call only.");
+            }
+
+            return outermostExpression.Method;
+        }
+
+        #endregion Reflection
     }
 }

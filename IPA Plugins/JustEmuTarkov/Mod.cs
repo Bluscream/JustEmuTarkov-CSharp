@@ -47,8 +47,11 @@ namespace JustEmuTarkov
 #if DEBUG
             HarmonyInstance.DEBUG = true;
 #endif
+            Logger.Log("Patching Login");
+            var success = Patches.Login.Patch(harmonyInstance);
+            if (success) Logger.Log("Patched Login");
             Logger.Log("Patching BattlEye");
-            var success = Patches.BattleEye.Patch(harmonyInstance);
+            success = Patches.BattlEye.Patch(harmonyInstance);
             if (success) Logger.Log("Patched BattlEye");
 
 #if DEBUG

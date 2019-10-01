@@ -11,18 +11,18 @@ namespace JustEmuTarkov.Utils
     {
         internal enum PatchMethodsEnum { TargetMethod, Prepare, Prefix, Postfix, Transpiler }
 
-        public static bool PatchMethods(HarmonyInstance harmonyInstance, List<PatchClass> patches)
+        public static bool PatchMethods(HarmonyInstance harmonyInstance, List<PatchClass> patches, MethodInfo patcherPrefix = null)
         {
             var success = new List<bool>();
             foreach (var patch in patches)
             {
-                success.Add(PatchMethod(harmonyInstance, patch.Class, patch.Method, patch.PatchWithClass));
+                success.Add(PatchMethod(harmonyInstance, patch.Class, patch.Method, patch.PatchWithClass, patcherPrefix));
             }
 
             return !success.Contains(false);
         }
 
-        public static bool PatchMethod(HarmonyInstance harmonyInstance, Type Class, MethodInfo method, Type patchClass = null)
+        public static bool PatchMethod(HarmonyInstance harmonyInstance, Type Class, MethodInfo method, Type patchClass = null, MethodInfo patcherPrefix = null)
         {
             if (patchClass is null) patchClass = new StackTrace().GetFrame(1).GetMethod().ReflectedType;
             if (Class is null || method is null)
@@ -34,9 +34,11 @@ namespace JustEmuTarkov.Utils
             try
             {
                 Logger.Debug("Preparing patch for {0}", replStr);
-                var harmonyMethod = GetPatch(Class);
+                HarmonyMethod harmonyMethod;
+                if (patcherPrefix is null) harmonyMethod = GetPatch(Class);
+                else harmonyMethod = new HarmonyMethod(patcherPrefix);
                 Logger.Debug("Patching {0}", replStr);
-                harmonyInstance.Patch(method, harmonyMethod, null, null);
+                harmonyInstance.Patch(method, harmonyMethod);
                 Logger.Debug("Patched {0}", replStr);
             }
             catch (Exception ex)
