@@ -48,7 +48,7 @@ namespace JustEmuTarkov
             HarmonyInstance.DEBUG = true;
 #endif
             Logger.Log("Patching BattlEye");
-            Utils.PatchHelper.PatchMethod(harmonyInstance, typeof(EFT.MainApplication), "Class893", "method_0", typeof(Patches.BattleEye));
+            Patches.BattleEye.Patch(harmonyInstance);
             Logger.Log("Patched BattlEye");
             // Utils.PatchHelper.PatchMethod(harmonyInstance, typeof(EFT.MainApplication), "Class1173", "method_0", typeof(Patches.LocalGame));
 
