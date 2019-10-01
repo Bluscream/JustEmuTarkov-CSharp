@@ -54,7 +54,7 @@
     </Reference>
     <Reference Include="UnityNamedPipe">
       <HintPath>..\..\..\unity-named-pipes\UnityNamedPipe\bin\Debug\netcoreapp2.0\UnityNamedPipe.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>

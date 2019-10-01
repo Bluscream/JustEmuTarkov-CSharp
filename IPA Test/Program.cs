@@ -2,9 +2,11 @@
 using Mono.Cecil.Cil;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Reflection;
 
 namespace IPA_Test
 {
@@ -12,7 +14,21 @@ namespace IPA_Test
     {
         private static void Main(string[] args)
         {
-            var files = new string[] {
+            var cmd = new Process {
+                StartInfo = {
+                    FileName = "cmd",
+                    RedirectStandardInput = true,
+                    RedirectStandardOutput = true,
+                    CreateNoWindow = true,
+                    UseShellExecute = false
+                }
+            };
+            cmd.Start();
+            cmd.StandardInput.WriteLine("chcp 65001");
+            cmd.StandardInput.Flush();
+            cmd.StandardInput.Close();
+            Console.OutputEncoding = Encoding.UTF8;
+            var files = new[] {
                // @"G:\Escape from Tarkov\EscapeFromTarkov_Data\Managed\Assembly-CSharp.dll",
                @"G:\Escape from Tarkov\EscapeFromTarkov_Data\Managed\Assembly-CSharp.dll.ORG",
             };
@@ -58,40 +74,39 @@ namespace IPA_Test
                 }
                 else
                 {
-                    var beName = string.Format("{0}::{1}", beClass.Name.ToUnicode(), beMethod.Name.ToUnicode());
+                    var beName = string.Format("{0}::{1} ({2}::{3})", beClass.Name, beMethod.Name, beClass.Name.ToUnicode(), beMethod.Name.ToUnicode());
                     Console.WriteLine("Found BattlEye as {0}", beName);
-                    Console.ReadKey();
+                    // Console.ReadKey();
                     var inst = new Collection<Instruction>();
-                    inst.Add(Instruction.Create(OpCodes.Ldarg_0, 00));
-                    inst.Add(Instruction.Create(OpCodes.Ldc_I4_1, 02));
-                    inst.Add(Instruction.Create(OpCodes.Callvirt, 17));
-                    inst.Add(Instruction.Create(OpCodes.Call, 6F8800000A));
-                    inst.Add(Instruction.Create(OpCodes.Callvirt));
-                    inst.Add(Instruction.Create(OpCodes.Ret));
-                    /*
-                    inst.Add(Instruction.Create(OpCodes.Ldc_I4_0));
-                    inst.Add(Instruction.Create(OpCodes.Newobj));
-                    inst.Add(Instruction.Create(OpCodes.Dup, 0x0019AD9B));
+                    // print call
+                    MethodInfo writeLineMethod = typeof(Console).GetMethod("WriteLine", new Type[] { typeof(string) });
+                    var sentence = string.Concat("BattlEye check called. Bypassing...");
+                    inst.Add(Instruction.Create(OpCodes.Ldstr, sentence));
+                    var writeLine = _Module.Import(writeLineMethod);
+                    inst.Add(Instruction.Create(OpCodes.Call, writeLine));
+                    // set success
                     inst.Add(Instruction.Create(OpCodes.Ldarg_0));
-                    inst.Add(Instruction.Create(OpCodes.Stfld, 0x0019AD9D));
+                    inst.Add(Instruction.Create(OpCodes.Ldc_I4_1));
+                    var _com_mod = ModuleDefinition.ReadModule(@"G:\Escape from Tarkov\EscapeFromTarkov_Data\Managed\Comfort.Unity.dll");
+                    var coms = _com_mod.GetTypes();
+                    var abs_op = coms.First(t => t.Name == "AbstractOperation");
+                    var succ_type = _Module.Import(abs_op.Properties.First(p => p.Name == "Succeed").SetMethod);
+                    inst.Add(Instruction.Create(OpCodes.Callvirt, succ_type));
+                    // reutrn empty IEnumerator
+                    var obj_type = _Module.Import(typeof(object));
+                    var obj_type_get_enu = _Module.Import(typeof(Array).GetMethod("GetEnumerator"));
+                    inst.Add(Instruction.Create(OpCodes.Ldc_I4_0));
+                    inst.Add(Instruction.Create(OpCodes.Newarr, obj_type));
+                    inst.Add(Instruction.Create(OpCodes.Call, obj_type_get_enu));
                     inst.Add(Instruction.Create(OpCodes.Ret));
-                    */
                     beMethod.Body.Instructions.Clear();
                     foreach (var _ins in inst)
                     {
                         beMethod.Body.Instructions.Add(_ins);
                     }
 
-                    // https://www.mono-project.com/docs/tools+libraries/libraries/Mono.Cecil/faq/
-                    var worker = beMethod.Body.GetILProcessor();
-
-                    var sentence = string.Concat("Code added in ", beName);
-                    var insertSentence = worker.Create(OpCodes.Ldstr, sentence);
-
-                    Instruction ins = beMethod.Body.Instructions[0];
-                    worker.InsertBefore(ins, insertSentence);
                     Console.WriteLine("Patched BattlEye!");
-                    Console.ReadKey();
+                    // Console.ReadKey();
                     var sFN = file.SplitFileName();
                     var sF = file.Directory.CombineFile(sFN.Key + ".noBE" + sFN.Value);
                     Console.WriteLine("Saving as {0}!", sF.FullName.Quote());

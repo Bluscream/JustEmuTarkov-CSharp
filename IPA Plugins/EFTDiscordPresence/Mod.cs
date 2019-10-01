@@ -2,6 +2,7 @@
 using IllusionPlugin;
 using System;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
@@ -12,7 +13,11 @@ namespace EFTDiscordPresence
         public string Name { get { return "Discord Rich Presence"; } }
         public string Version { get { return "1.0"; } }
         private bool GameInitialized = false;
+#if DEBUG
+        private bool debug = true;
+#else
         private bool debug = false;
+#endif
 
         private DiscordRpcClient client;
 
@@ -34,9 +39,6 @@ namespace EFTDiscordPresence
 
         public Mod()
         {
-#if DEBUG
-            debug = true;
-#endif
             Logger.Log("Plugin Initialized");
             // LoadLibrary("EscapeFromTarkov_Data/Plugins/discord-rpc.dll");
         }
@@ -104,11 +106,18 @@ namespace EFTDiscordPresence
             Logger.Log("[Discord] RichPresence Initialised");
         }
 
+        public void Awake()
+        {
+            Logger.Log("Awake()");
+            DontDestroyOnLoad(this);
+        }
+
         public void OnApplicationStart()
         {
+            // AppDomain.CurrentDomain.Load(AssemblyName.GetAssemblyName("UnityNamedPipe"));
             InitRPC();
             Logger.Log("OnApplicationStart");
-            var go = new GameObject("name").
+            // var go = new GameObject("name")
             // StartCoroutine(Classes.DiscordManager);
             presence.State = "OnApplicationStart";
             client.SetPresence(presence);
@@ -134,7 +143,11 @@ namespace EFTDiscordPresence
             GameInitialized = true;
             Logger.Log("OnGameInitialized");
             client.UpdateState("OnGameInitialized");
-            Logger.Log("Loaded assemblies: {0}", string.Join(debug ? "\n" : ", ", AppDomain.CurrentDomain.GetAssemblies().Select(a => a.GetName().Name).ToArray()));
+#if DEBUG
+            Logger.Debug("Loaded assemblies:\n{0}", string.Join("\n", AppDomain.CurrentDomain.GetAssemblies().Select(a => a.GetName().FullName).OrderBy(x => x).ToArray()));
+#else
+            Logger.Debug("Loaded assemblies: {0}", string.Join(", ", AppDomain.CurrentDomain.GetAssemblies().Select(a => a.GetName().Name).ToArray()));
+#endif
             Logger.Log($"[Discord] {client.SteamID}");
             Logger.Log($"[Discord] {client.TargetPipe}");
             Logger.Log($"[Discord] {client.ApplicationID}");
@@ -161,11 +174,16 @@ namespace EFTDiscordPresence
 
         public void OnUpdate()
         {
+            client.Invoke();
+        }
+
+        public void OnGUI()
+        {
+            Logger.Trace("OnGUI");
         }
 
         public void OnFixedUpdate()
         {
-            client.Invoke();
         }
 
         public void OnApplicationQuit()
