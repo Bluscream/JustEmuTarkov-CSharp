@@ -8,13 +8,12 @@ using System.Text;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 
-namespace IPA_Test
-{
+namespace IPA_Test {
     class Program {
         static void Main(string[] args) {
             var files = new string[] {
-               @"G:\Escape from Tarkov\EscapeFromTarkov_Data\Managed\Assembly-CSharp.dll",
-               // @"G:\Escape from Tarkov\EscapeFromTarkov_Data\Managed\Assembly-CSharp.dll.JET",
+               // @"G:\Escape from Tarkov\EscapeFromTarkov_Data\Managed\Assembly-CSharp.dll",
+               @"G:\Escape from Tarkov\EscapeFromTarkov_Data\Managed\Assembly-CSharp.dll.ORG",
             };
             foreach (var dll in files)
             {
@@ -54,17 +53,25 @@ namespace IPA_Test
                     var beName = string.Format("{0}::{1}", beClass.Name.ToUnicode(), beMethod.Name.ToUnicode());
                     Console.WriteLine("Found BattlEye as {0}", beName);
                     Console.ReadKey();
-                    /*var inst = new Collection<Instruction>();
+                    var inst = new Collection<Instruction>();
+                    inst.Add(Instruction.Create(OpCodes.Ldarg_0, 00));
+                    inst.Add(Instruction.Create(OpCodes.Ldc_I4_1, 02));
+                    inst.Add(Instruction.Create(OpCodes.Callvirt, 17));
+                    inst.Add(Instruction.Create(OpCodes.Call, 6F8800000A));
+                    inst.Add(Instruction.Create(OpCodes.Callvirt));
+                    inst.Add(Instruction.Create(OpCodes.Ret));
+                    /*
                     inst.Add(Instruction.Create(OpCodes.Ldc_I4_0));
                     inst.Add(Instruction.Create(OpCodes.Newobj));
                     inst.Add(Instruction.Create(OpCodes.Dup, 0x0019AD9B));
                     inst.Add(Instruction.Create(OpCodes.Ldarg_0));
                     inst.Add(Instruction.Create(OpCodes.Stfld, 0x0019AD9D));
                     inst.Add(Instruction.Create(OpCodes.Ret));
+                    */
                     beMethod.Body.Instructions.Clear();
-                    foreach (var ins in inst) {
-                        beMethod.Body.Instructions.Add(ins);
-                    }*/
+                    foreach (var _ins in inst) {
+                        beMethod.Body.Instructions.Add(_ins);
+                    }
 
                     // https://www.mono-project.com/docs/tools+libraries/libraries/Mono.Cecil/faq/
                     var worker = beMethod.Body.GetILProcessor();

@@ -38,7 +38,7 @@ namespace TestPlugin {
             // NLogger.Info(formatted); UnityEngine.Debug.Log(formatted);
              string timestamp = DateTime.Now.ToString("HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
             StackFrame frame = new StackFrame(2); var method = frame.GetMethod(); var cName = method.DeclaringType.Name; var mName = method.Name;
-            var line = $"[{timestamp}] <JustEmuTarkov> {logLevel} - {cName}.{mName}: {formatted}";
+            var line = $"[{timestamp}] <Test Plugin> {logLevel} - {cName}.{mName}: {formatted}";
             Console.WriteLine(line);
             if (LogWriter != null) LogWriter.WriteLine(line);
         }

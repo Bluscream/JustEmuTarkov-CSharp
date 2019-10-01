@@ -38,9 +38,48 @@ namespace EFTDiscordPresence {
             // NLogger.Info(formatted); UnityEngine.Debug.Log(formatted);
              string timestamp = DateTime.Now.ToString("HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
             StackFrame frame = new StackFrame(2); var method = frame.GetMethod(); var cName = method.DeclaringType.Name; var mName = method.Name;
-            var line = $"[{timestamp}] <JustEmuTarkov> {logLevel} - {cName}.{mName}: {formatted}";
+            var line = $"[{timestamp}] <EFTDiscordPresence> {logLevel} - {cName}.{mName}: {formatted}";
             Console.WriteLine(line);
             if (LogWriter != null) LogWriter.WriteLine(line);
         }
     }
+    /*public class CustomLogger : ILogger
+    {
+        private readonly string CategoryName;
+        private readonly string _logPrefix;
+
+        public CustomLogger(string categoryName, string logPrefix)
+        {
+            CategoryName = categoryName;
+            _logPrefix = logPrefix;
+        }
+
+        public IDisposable BeginScope<TState>(TState state)
+        {
+            return new NoopDisposable();
+        }
+
+        public bool IsEnabled(LogLevel logLevel)
+        {
+            return true;
+        }
+
+        public void Log<TState>(LogLevel logLevel, object eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
+        {
+            string message = _logPrefix;
+            if (formatter != null)
+            {
+                message += formatter(state, exception);
+            }
+            // Implement log writter as you want. I am using Console
+            Console.WriteLine($"{logLevel.ToString()} - {eventId} - {CategoryName} - {message}");
+        }
+
+        private class NoopDisposable : IDisposable
+        {
+            public void Dispose()
+            {
+            }
+        }
+    }*/
 }
