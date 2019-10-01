@@ -67,7 +67,7 @@ namespace JustEmuTarkov.Patches
 
         public static bool Prefix(object __instance, object battleEyeLogDelegate)
         {
-            Logger.Log("Bypassing BattleEye check");
+            Logger.Debug("Bypassing BattleEye check");
             typeof(Comfort.Common.Operation).Assembly.GetTypes()
                 .First(t => t.Name == "AbstractOperation").GetProperties().First(p => p.Name == "Succeed")
                 .SetValue(__instance, true, new object[] { });

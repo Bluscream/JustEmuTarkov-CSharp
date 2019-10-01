@@ -53,6 +53,9 @@ namespace JustEmuTarkov
             Logger.Log("Patching BattlEye");
             success = Patches.BattlEye.Patch(harmonyInstance);
             if (success) Logger.Log("Patched BattlEye");
+            Logger.Log("Patching ZoomFix");
+            success = Patches.ZoomFix.Patch(harmonyInstance);
+            if (success) Logger.Log("Patched ZoomFix");
 
 #if DEBUG
             var patchedMethods = harmonyInstance.GetPatchedMethods().Select(p => p.DeclaringType?.Name + ":" + p.Name);

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using Harmony;
 using JustEmuTarkov.Utils;
@@ -33,7 +31,7 @@ namespace JustEmuTarkov.Patches
 
         public static bool Prefix()
         {
-            Logger.Log("Bypassing login token check");
+            Logger.Debug("Bypassing login token check");
             return false;
         }
     }
