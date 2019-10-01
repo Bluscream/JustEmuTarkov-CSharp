@@ -9,21 +9,30 @@ namespace JustEmuTarkov.Patches
 {
     public class BattleEye
     {
-        public static void Patch(HarmonyInstance harmonyInstance)
+        public static bool Patch(HarmonyInstance harmonyInstance)
         {
             var patches = new List<PatchHelper.PatchClass>();
-            var asm = Assembly.GetExecutingAssembly();
+            var asm = AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "Assembly-CSharp");
             var beCheck = new PatchHelper.PatchClass() { PatchWithClass = typeof(BattleEye) };
             foreach (var _class in asm.GetTypes())
             {
-                if (_class.GetProperties().Length != 1) continue;
-                if (_class.GetFields().Length != 2) continue;
+                /* if (_class.Name == "Class893")
+                {
+                    Logger.Trace("properties " + _class.GetProperties().Length);
+                    Logger.Trace("fields " + _class.GetFields().Length);
+                    Logger.Trace("methods " + _class.GetMethods().Length);
+                    Logger.Trace("properties " + _class.GetProperties().Length);
+                } */
+                if (_class.GetProperties().Length != 5) continue;
+                if (_class.GetFields().Length != 0) continue;
                 var classMethods = _class.GetMethods();
-                if (classMethods.Length < 1) continue;
+                if (classMethods.Length != 17) continue;
                 foreach (var method in classMethods)
                 {
-                    if (method.ReturnType.ToString() == "System.Collections.IEnumerator" &&
-                        method.GetParameters().Length == 1)
+                    if (method.ReturnType.ToString() != "System.Collections.IEnumerator") continue;
+                    var p = method.GetParameters();
+                    if (p.Length != 1) continue;
+                    if (p.Length != 1 || p[0].ParameterType.FullName != "BattlEye.BEClient+LogDelegate") continue;
                     {
                         beCheck.Method = method;
                         break;
@@ -34,7 +43,7 @@ namespace JustEmuTarkov.Patches
                 break;
             }
             patches.Add(beCheck);
-            PatchHelper.PatchMethods(harmonyInstance, patches);
+            return PatchHelper.PatchMethods(harmonyInstance, patches);
         }
 
         // public bool Succeed { get; set; }

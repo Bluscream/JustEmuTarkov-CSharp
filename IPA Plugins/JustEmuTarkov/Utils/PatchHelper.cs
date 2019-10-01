@@ -11,30 +11,40 @@ namespace JustEmuTarkov.Utils
     {
         internal enum PatchMethodsEnum { TargetMethod, Prepare, Prefix, Postfix, Transpiler }
 
-        public static void PatchMethods(HarmonyInstance harmonyInstance, List<PatchClass> patches)
+        public static bool PatchMethods(HarmonyInstance harmonyInstance, List<PatchClass> patches)
         {
+            var success = new List<bool>();
             foreach (var patch in patches)
             {
-                PatchMethod(harmonyInstance, patch.Class, patch.Method, patch.PatchWithClass);
+                success.Add(PatchMethod(harmonyInstance, patch.Class, patch.Method, patch.PatchWithClass));
             }
+
+            return !success.Contains(false);
         }
 
-        public static void PatchMethod(HarmonyInstance harmonyInstance, Type Class, MethodInfo method, Type patchClass)
+        public static bool PatchMethod(HarmonyInstance harmonyInstance, Type Class, MethodInfo method, Type patchClass = null)
         {
             if (patchClass is null) patchClass = new StackTrace().GetFrame(1).GetMethod().ReflectedType;
+            if (Class is null || method is null)
+            {
+                Logger.Error("Patch for {0} was not found!", patchClass);
+                return false;
+            }
             var replStr = $"{Class.Name}::{method.Name} with {patchClass.FullName}";
             try
             {
-                Logger.Log("Preparing patch for {0}", replStr);
-                var harmonyMethod = GetPatch(Class.GetType());
-                Logger.Log("Patching {0}", replStr);
+                Logger.Debug("Preparing patch for {0}", replStr);
+                var harmonyMethod = GetPatch(Class);
+                Logger.Debug("Patching {0}", replStr);
                 harmonyInstance.Patch(method, harmonyMethod, null, null);
-                Logger.Log("Patched {0}", replStr);
+                Logger.Debug("Patched {0}", replStr);
             }
             catch (Exception ex)
             {
-                Logger.Log("[ERROR] Unable to patch {0} {1}", replStr, ex.Message.Enclose());
+                Logger.Error("Unable to patch {0} {1}", replStr, ex.Message.Enclose());
+                return false;
             }
+            return true;
         }
 
         private static HarmonyMethod GetPatch(Type type, PatchMethodsEnum patchMethod = PatchMethodsEnum.Prefix) => new HarmonyMethod(type.GetMethod(Enum.GetName(typeof(PatchMethodsEnum), patchMethod)));
