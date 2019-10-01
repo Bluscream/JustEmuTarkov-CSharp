@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading;
-using UnityEngine;
 
 namespace Doorstop
 {
     public class Injector
     {
-        public static void Main(string[] args) {
+        public static void Main(string[] args)
+        {
             ExternalConsole.InitConsole();
             Logger.Debug("Start");
             Logger.Log("Loaded assemblies: {0}", string.Join(", ", AppDomain.CurrentDomain.GetAssemblies().Select(a => a.GetName().Name).ToArray()));
@@ -28,7 +26,8 @@ namespace Doorstop
             if (asmName == "UnityEngine") OnUnityLoaded();
         }
 
-        private static void OnUnityLoaded() {
+        private static void OnUnityLoaded()
+        {
             Logger.Log("Unity was loaded!");
         }
 
@@ -37,7 +36,8 @@ namespace Doorstop
             Logger.Log("Process exiting!");
         }
 
-        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e) {
+        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
             Logger.Log("Unhandled Exception in Game! IsTerminating: {0}\n{1}", e.IsTerminating, e.ExceptionObject.ToJson());
         }
 
@@ -51,9 +51,11 @@ namespace Doorstop
         private static void WaitForUnity()
         {
             var loaded = false;
-            while (!loaded) {
+            while (!loaded)
+            {
                 Assembly[] asms = AppDomain.CurrentDomain.GetAssemblies();
-                foreach (Assembly asm in asms) {
+                foreach (Assembly asm in asms)
+                {
                     Logger.Log(asm.GetName().Name);
                     if (asm.GetName().Name == "UnityEngine") { loaded = true; break; }
                 };

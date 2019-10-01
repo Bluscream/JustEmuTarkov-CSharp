@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace JustEmuTarkov.Patches
+﻿namespace JustEmuTarkov.Patches
 {
-    class Login
+    internal class Login
     {
-
     }
 }

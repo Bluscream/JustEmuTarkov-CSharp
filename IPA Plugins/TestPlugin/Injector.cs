@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace TestPlugin
 {
-    class Injector
+    internal class Injector
     {
         public static void InjectStuff()
         {

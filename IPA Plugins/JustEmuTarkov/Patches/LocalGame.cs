@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace JustEmuTarkov.Patches
+﻿namespace JustEmuTarkov.Patches
 {
-    class LocalGame
+    internal class LocalGame
     {/*
 			public void Prefix(object __instance) {
             // Array.Find(beClass.GetProperties(), x => x.Name.Equals("localGame_0")).SetValue(__instance, EFT.GameStatus.Stopped, new object[] { });

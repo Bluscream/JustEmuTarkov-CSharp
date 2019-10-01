@@ -1,41 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using Harmony;
 using IllusionPlugin;
-using UnityEngine;
-using UnityEngine.Networking;
-using EFT;
-using Harmony;
+using System;
+using System.Linq;
 
 namespace JustEmuTarkov
 {
-    public class Mod : IPlugin {
+    public class Mod : IPlugin
+    {
         public string Name { get { return "JustEmuTarkov"; } }
         public string Version { get { return "1.0"; } }
         private bool GameInitialized = false;
 
         [Obsolete]
-        public Mod() {
+        public Mod()
+        {
             Logger.Log("Plugin Initialized");
             PatchMethods();
             Patches.SSL.Disable();
         }
 
-        public void OnApplicationStart() {
+        public void OnApplicationStart()
+        {
             Logger.Log("OnApplicationStart");
         }
-        public void OnLevelWasInitialized(int level) {
+
+        public void OnLevelWasInitialized(int level)
+        {
             Logger.Log("OnLevelWasInitialized {0}", level);
             if (!GameInitialized) OnGameInitialized();
         }
+
         public void OnLevelWasLoaded(int level)
         {
             Logger.Log("OnLevelWasLoaded {0}", level);
         }
 
-        private void OnGameInitialized() {
+        private void OnGameInitialized()
+        {
             GameInitialized = true;
             Logger.Log("OnGameInitialized");
         }
@@ -61,14 +62,15 @@ namespace JustEmuTarkov
         {
             // Logger.Log("OnUpdate");
         }
+
         public void OnFixedUpdate()
         {
             // Logger.Log("OnFixedUpdate");
         }
+
         public void OnApplicationQuit()
         {
             Logger.Log("OnApplicationQuit");
         }
-
     }
 }
